@@ -1,9 +1,9 @@
 import time
 from turtle import Screen
-from paddle import Paddle
+from spaceship import Spaceship
 from ball import Ball
 from score import ScoreBoard
-from bricks import Brick
+from aliens import Aliens
 import random
 
 
@@ -18,27 +18,23 @@ screen.title("Pong")
 screen.tracer(0)
 
 # Calling classes
-paddle = Paddle((0, -550))
-ball = Ball((0, -525))
-list_bricks = []  # My list of Bricks Objects
+spaceship = Spaceship((0, -550))
+ball = Ball((spaceship.xcor(), spaceship.ycor()))
+list_aliens = []  # My list of Spaceships Objects
 
-# Set the initial position for the first line of bricks
-y_pos = 400
-brick_count = 14  # Number of bricks in a row
-total_width = 800  # Total width for the row
+# Set the initial position for the first line of spaceships
+y_pos = 390
+spaceship_count = 9  # Number of bricks in a row
 
-# Calculate the fixed distance between bricks
-brick_width = total_width / brick_count
 
 # Loop to create multiple rows of bricks
-for _ in range(7):
+for _ in range(5):
     x_pos = -380
-    for _ in range(brick_count):
-        # Generate a random width and color for the brick
-        random_color = random.choice(COLORS)
-        wall = Brick((x_pos, y_pos), color=random_color)
-        list_bricks.append(wall)
-        x_pos += brick_width
+    random_color = random.choice(COLORS)
+    for _ in range(spaceship_count):
+        alien = Aliens((x_pos, y_pos), color=random_color)
+        list_aliens.append(alien)
+        x_pos += 50
     y_pos -= 50
 
 # Player Scoreboard
@@ -46,36 +42,57 @@ scoreboard = ScoreBoard(0)
 
 # Registering Commands
 screen.listen()
-screen.onkeypress(paddle.move_right, "d")
-screen.onkeypress(paddle.move_left, "a")
+screen.onkeypress(spaceship.move_right, "d")
+screen.onkeypress(spaceship.move_left, "a")
 
 # Running the Game
 game_is_on = True
+c_move = False
 while game_is_on:
     time.sleep(ball.move_speed)
     screen.update()
     ball.move()
+
     if ball.ycor() > 585:
         ball.bounce_y()
 
     if ball.xcor() > 385 or ball.xcor() < -385:
         ball.bounce_x()
 
-    if ball.distance(paddle) < 40:
-        ball.paddle_bounce()
-
     if ball.ycor() < -600:
         scoreboard.game_over()
+        game_is_on = False
 
-    if len(list_bricks) == 0:
+    if len(list_aliens) == 0:
         scoreboard.win()
+        game_is_on = False
 
-    for brick in list_bricks:
-        if ball.distance(brick) < 30:
-            ball.brick_bounce()
-            brick.delete_brick()
+    if list_aliens[8].xcor() > 400:
+        for n in range(len(list_aliens)):
+            list_aliens[n].move_left()
+
+    if c_move == True:
+        for n in range(len(list_aliens)):
+            list_aliens[n].move_right()
+        c_move = False
+
+    for alien_status in list_aliens:
+        alien_status.move()
+
+        # # Alien movement
+        # if alien_status.xcor() > 400:
+        #     for n in range(len(list_aliens)):
+        #         alien_status.move_left()
+        #
+        # if alien_status.xcor() > -400:
+        #     for n in range(len(list_aliens)):
+        #         alien_status.move_right()
+
+        # Alien laser collision
+        if ball.distance(alien_status) < 30:
+            alien_status.delete_alien()
             scoreboard.increase_score()
-            list_bricks.remove(brick)
+            list_aliens.remove(alien_status)
 
     if scoreboard.score > BALL_SPEED_PARAM:
         ball.ball_speed()

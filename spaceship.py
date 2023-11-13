@@ -1,15 +1,16 @@
 from turtle import Turtle
 
 
-class Paddle(Turtle):
+class Spaceship(Turtle):
 
     def __init__(self, paddle_pos):
         super().__init__()
         self.speed("fastest")
-        self.shape("square")
+        self.shape("triangle")
         self.color("white")
+        self.tilt(90)
         self.penup()
-        self.turtlesize(stretch_wid=1, stretch_len=5)
+        self.turtlesize(stretch_wid=2, stretch_len=2)
         self.goto(paddle_pos)
 
     def move_right(self):

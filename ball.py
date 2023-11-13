@@ -14,7 +14,7 @@ class Ball(Turtle):
         self.goto(ball_pos)
 
     def move(self):
-        new_x = self.xcor() + self.x_move
+        new_x = self.xcor()
         new_y = self.ycor() + self.y_move
         self.goto(new_x, new_y)
 
