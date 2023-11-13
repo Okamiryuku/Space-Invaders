@@ -36,8 +36,7 @@ for _ in range(7):
     for _ in range(brick_count):
         # Generate a random width and color for the brick
         random_color = random.choice(COLORS)
-        random_width = random.uniform(0.5, 2.8)
-        wall = Brick((x_pos, y_pos), width=random_width, color=random_color)
+        wall = Brick((x_pos, y_pos), color=random_color)
         list_bricks.append(wall)
         x_pos += brick_width
     y_pos -= 50
