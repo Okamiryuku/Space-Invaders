@@ -47,7 +47,7 @@ screen.onkeypress(spaceship.move_left, "a")
 
 # Running the Game
 game_is_on = True
-c_move = False
+
 while game_is_on:
     time.sleep(ball.move_speed)
     screen.update()
@@ -75,7 +75,6 @@ while game_is_on:
     if list_aliens[0].xcor() < -400:
         for n in range(len(list_aliens)):
             list_aliens[n].move_right()
-        c_move = False
 
     for alien_status in list_aliens:
         alien_status.move()
