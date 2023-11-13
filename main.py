@@ -67,11 +67,12 @@ while game_is_on:
         scoreboard.win()
         game_is_on = False
 
+    # Alien movement
     if list_aliens[8].xcor() > 400:
         for n in range(len(list_aliens)):
             list_aliens[n].move_left()
 
-    if c_move == True:
+    if list_aliens[0].xcor() < -400:
         for n in range(len(list_aliens)):
             list_aliens[n].move_right()
         c_move = False
@@ -79,17 +80,8 @@ while game_is_on:
     for alien_status in list_aliens:
         alien_status.move()
 
-        # # Alien movement
-        # if alien_status.xcor() > 400:
-        #     for n in range(len(list_aliens)):
-        #         alien_status.move_left()
-        #
-        # if alien_status.xcor() > -400:
-        #     for n in range(len(list_aliens)):
-        #         alien_status.move_right()
-
         # Alien laser collision
-        if ball.distance(alien_status) < 30:
+        if ball.distance(alien_status) < 20:
             alien_status.delete_alien()
             scoreboard.increase_score()
             list_aliens.remove(alien_status)
