@@ -8,7 +8,7 @@ import random
 
 
 BALL_SPEED_PARAM = 10  # If the score gets over this the ball moves faster
-COLORS = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "gray", "grey", "cyan"]
+COLORS = ["red", "green", "blue", "yellow", "orange", "purple", "grey", "cyan"]
 LIVES = 3
 
 # Window Setup
@@ -21,8 +21,8 @@ screen.tracer(0)
 # Calling classes
 spaceship = Spaceship((0, -550))
 list_aliens = []  # My list of Spaceships Objects
-user_lasers = [] # My list of Lasers
-alien_lasers = [] # My list of Lasers
+user_lasers = []  # My list of Lasers
+alien_lasers = []  # My list of Lasers
 
 # Set the initial position for the first line of spaceships
 y_pos = 390
@@ -46,6 +46,7 @@ scoreboard = ScoreBoard(0)
 # Shooting Lasers
 def laser_shot():
     laser = Laser((spaceship.xcor(), spaceship.ycor()))
+    laser.move()
     user_lasers.append(laser)
     user_lasers[-1].move_up()
 
@@ -104,16 +105,16 @@ while game_is_on:
         alien_status.move()
 
         # Alien laser collision
-        for laser in user_lasers:
-            if laser.distance(alien_status) > 20:
-                alien_status.delete_alien()
-                scoreboard.increase_score()
-                list_aliens.remove(alien_status)
-
-        # Shooting lasers
-        if random.randint(0, 16) == 2:
-            random_choice = random.choice(list_aliens)
-            laser_shot()
+        # for laser in user_lasers:
+        #     if laser.distance(alien_status) > 20:
+        #         alien_status.delete_alien()
+        #         scoreboard.increase_score()
+        #         list_aliens.remove(alien_status)
+        #
+        # # Shooting lasers
+        # if random.randint(0, 16) == 2:
+        #     random_choice = random.choice(list_aliens)
+        #     laser_shot()
 
 
 screen.exitonclick()
