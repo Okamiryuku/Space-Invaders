@@ -21,8 +21,8 @@ screen.tracer(0)
 # Calling classes
 spaceship = Spaceship((0, -550))
 list_aliens = []  # My list of Spaceships Objects
-user_lasers = []  # My list of Lasers
-alien_lasers = []  # My list of Lasers
+user_lasers = []  # My list of User Lasers
+alien_lasers = []  # My list of Alien Lasers
 
 # Set the initial position for the first line of spaceships
 y_pos = 390
