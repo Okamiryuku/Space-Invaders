@@ -40,7 +40,7 @@ for _ in range(5):
     y_pos -= 50
 
 # Player Scoreboard
-scoreboard = ScoreBoard(0)
+scoreboard = ScoreBoard(0, lives=LIVES)
 
 
 # Shooting Lasers
@@ -96,6 +96,7 @@ while game_is_on:
             LIVES -= 1
             al.delete_laser()
             alien_lasers.remove(al)
+            scoreboard.decrease_lives()
 
     # Checking User Lives
     if LIVES == 0:
