@@ -3,11 +3,11 @@ from turtle import Turtle
 
 class Laser(Turtle):
 
-    def __init__(self, laser_pos):
+    def __init__(self, laser_pos, color):
         super().__init__()
         self.speed("fastest")
         self.shape("square")
-        self.color("yellow")
+        self.color(color)
         self.penup()
         self.x_move = 10
         self.y_move = 10
@@ -22,7 +22,7 @@ class Laser(Turtle):
 
     def move_down(self):
         new_x = self.xcor()
-        new_y = (self.ycor() + self.y_move) * -1
+        new_y = self.ycor() + self.y_move * -1
         self.goto(new_x, new_y)
 
     def delete_laser(self):

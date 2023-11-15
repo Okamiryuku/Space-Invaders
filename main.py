@@ -45,12 +45,12 @@ scoreboard = ScoreBoard(0)
 
 # Shooting Lasers
 def laser_shot():
-    u_laser = Laser((spaceship.xcor(), spaceship.ycor()))
+    u_laser = Laser((spaceship.xcor(), spaceship.ycor()), color="yellow")
     user_lasers.append(u_laser)
 
 
 def alien_laser_shot(alien_pos):
-    a_laser = Laser((alien_pos.xcor(), alien_pos.ycor()))
+    a_laser = Laser((alien_pos.xcor(), alien_pos.ycor()), color="red")
     alien_lasers.append(a_laser)
 
 
@@ -58,7 +58,7 @@ def alien_laser_shot(alien_pos):
 screen.listen()
 screen.onkeypress(spaceship.move_right, "d")
 screen.onkeypress(spaceship.move_left, "a")
-screen.onkeypress(laser_shot, "space")
+screen.onkey(laser_shot, "space")
 
 # Running the Game
 game_is_on = True
@@ -92,7 +92,7 @@ while game_is_on:
 
     # Alien Lasers Hit the User
     for al in alien_lasers:
-        if al.distance(spaceship) < 30:
+        if al.distance(spaceship) < 20:
             LIVES -= 1
             al.delete_laser()
             alien_lasers.remove(al)
@@ -116,14 +116,18 @@ while game_is_on:
     for alien in list_aliens:
         alien.move()
 
-        # # Alien laser collision
-        # for ul in user_lasers:
-        #     if ul.distance(alien) > 20:
-        #         alien.delete_alien()
-        #         scoreboard.increase_score()
-        #         list_aliens.remove(alien)
+    # Alien laser collision
+    for alien in list_aliens:
+        for ul in user_lasers:
+            if ul.distance(alien) < 20:
+                alien.delete_alien()
+                ul.delete_laser()
+                scoreboard.increase_score()
+                user_lasers.remove(ul)
+                list_aliens.remove(alien)
 
-        # Shooting lasers
+    # Shooting lasers
+    for alien in list_aliens:
         if random.randint(0, 300) == 2:
             random_choice = random.choice(list_aliens)
             alien_laser_shot(alien)
