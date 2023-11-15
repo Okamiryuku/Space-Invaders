@@ -8,7 +8,7 @@ import random
 
 
 BALL_SPEED_PARAM = 10  # If the score gets over this the ball moves faster
-COLORS = ["red", "green", "blue", "yellow", "orange", "purple", "grey", "cyan"]
+COLORS = ["red", "green", "yellow", "orange", "purple", "cyan"]
 LIVES = 3
 
 # Window Setup
@@ -45,10 +45,13 @@ scoreboard = ScoreBoard(0)
 
 # Shooting Lasers
 def laser_shot():
-    laser = Laser((spaceship.xcor(), spaceship.ycor()))
-    laser.move()
-    user_lasers.append(laser)
-    user_lasers[-1].move_up()
+    u_laser = Laser((spaceship.xcor(), spaceship.ycor()))
+    user_lasers.append(u_laser)
+
+
+def alien_laser_shot(alien_pos):
+    a_laser = Laser((alien_pos.xcor(), alien_pos.ycor()))
+    alien_lasers.append(a_laser)
 
 
 # Registering Commands
@@ -61,60 +64,69 @@ screen.onkeypress(laser_shot, "space")
 game_is_on = True
 
 while game_is_on:
-    time.sleep(.6)
+    time.sleep(0.1)
     screen.update()
 
     if len(list_aliens) == 0:
         scoreboard.win()
         game_is_on = False
 
-        # User Lasers Out of Bounds
-        for laser in user_lasers:
-            if laser.ycor() > 600:
-                laser.delete_laser()
-                user_lasers.remove(laser)
+    # Laser Movement
+    for ul in user_lasers:
+        ul.move_up()
 
-        # Alien Lasers Out of Bounds
-        for laser in alien_lasers:
-            if laser.ycor() < -600:
-                laser.delete_laser()
-                alien_lasers.remove(laser)
+    for al in alien_lasers:
+        al.move_down()
 
-        # Alien Lasers Hit the User
-        for laser in alien_lasers:
-            if laser.distance(spaceship) < 30:
-                LIVES -= 1
-                laser.delete_laser()
-                alien_lasers.remove(laser)
+    # User Lasers Out of Bounds
+    for ul in user_lasers:
+        if ul.ycor() > 600:
+            ul.delete_laser()
+            user_lasers.remove(ul)
 
-        # Checking User Lives
-        if LIVES == 0:
-            scoreboard.game_over()
-            game_is_on = False
+    # Alien Lasers Out of Bounds
+    for al in alien_lasers:
+        if al.ycor() < -600:
+            al.delete_laser()
+            alien_lasers.remove(al)
+
+    # Alien Lasers Hit the User
+    for al in alien_lasers:
+        if al.distance(spaceship) < 30:
+            LIVES -= 1
+            al.delete_laser()
+            alien_lasers.remove(al)
+
+    # Checking User Lives
+    if LIVES == 0:
+        scoreboard.game_over()
+        game_is_on = False
 
     # Alien movement
     for alien in list_aliens:
         if alien.xcor() > 400:
-            alien.move_left()
+            for n in range(len(list_aliens)):
+                list_aliens[n].move_left()
 
     for alien in list_aliens:
         if alien.xcor() < -400:
-            alien.move_right()
+            for n in range(len(list_aliens)):
+                list_aliens[n].move_right()
 
-    for alien_status in list_aliens:
-        alien_status.move()
+    for alien in list_aliens:
+        alien.move()
 
-        # Alien laser collision
-        # for laser in user_lasers:
-        #     if laser.distance(alien_status) > 20:
-        #         alien_status.delete_alien()
+        # # Alien laser collision
+        # for ul in user_lasers:
+        #     if ul.distance(alien) > 20:
+        #         alien.delete_alien()
         #         scoreboard.increase_score()
-        #         list_aliens.remove(alien_status)
-        #
-        # # Shooting lasers
-        # if random.randint(0, 16) == 2:
-        #     random_choice = random.choice(list_aliens)
-        #     laser_shot()
+        #         list_aliens.remove(alien)
+
+        # Shooting lasers
+        if random.randint(0, 300) == 2:
+            random_choice = random.choice(list_aliens)
+            alien_laser_shot(alien)
 
 
 screen.exitonclick()
